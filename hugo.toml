@@ -19,7 +19,7 @@ languageCode = "en-us"
 
     # Buttons on the home page
     [[params.profileMode.buttons]]
-      name = "Resume"
+      name = "resume"
       url = "/resume.pdf"
 
     [[params.profileMode.buttons]]
@@ -28,7 +28,7 @@ languageCode = "en-us"
 
     [[params.profileMode.buttons]]
       name = "Google Scholar"
-      url = "#" # Add this later if you have one
+      url = "https://scholar.google.com/citations?user=LJOY0t0AAAAJ&hl=en" # Add this later if you have one
 
   # Social Icons
   [[params.socialIcons]]
