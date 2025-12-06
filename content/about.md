@@ -13,7 +13,7 @@ My research philosophy centers on **Efficiency in AI**—specifically, designing
 
 | Degree | Institute | Performance | Year |
 | :--- | :--- | :--- | :--- |
-| **M.Tech (CSE)** | IIT Jammu | **NA** | 2027 (Cur) |
+| **M.Tech (CSE)** | IIT Jammu | **NA** | 2027 (Exp) |
 | **B.Tech (CSE)** | SMVDU | **8.91 CGPA** | 2024 |
 
 ### 🔭 Current Focus
@@ -23,6 +23,14 @@ At IIT Jammu, I am researching advanced architectures for **Medical Imaging**. M
 * **M.Tech in CSE:** IIT Jammu (Current | CGPA: N.A.)
 * **B.Tech in CSE:** Shri Mata Vaishno Devi University (2024 | CGPA: 8.91)
 * **GATE CS 2025:** Secured **All India Rank 911** (Top ~0.5% of 1.7L candidates)
+### 📚 Relevant Coursework
+
+| Domain | Subjects |
+| :--- | :--- |
+| **AI & Data Science** | Artificial Intelligence, Machine Learning, Neural Networks and Fuzzy Logic, Soft Computing, Nature Inspired Algorithims |
+| **Systems & Core** | Operating Systems, Compiler Design, Database Management,Computer Organisation and Architecture, Theory of Computation |
+| **Security & Cloud** | Cloud Computing, Cyber Security |
+| **Mathematics** | Engineering Mathematics, Discrete Mathematics, Linear Algebra, Probability & Statistics |
 
 ### 💡 Technical Arsenal
 * **Core:** Python, C++, Java
