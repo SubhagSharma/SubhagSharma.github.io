@@ -4,18 +4,19 @@ summary: "Novel segmentation using SOTA U-Net architectures with deep feature ex
 tags: ["TensorFlow", "Keras", "Medical Imaging", "U-Net"]
 weight: 1
 # VISUAL HOOK: This appears on the list page and top of post
-cover:
-    image: "/images/brain-output.png"
-    alt: "Segmentation Mask Output"
-    caption: "Model prediction vs Ground Truth"
-    hiddenInSingle: true
-    relative: false
+# cover:
+#     image: "/images/brain-output.png"
+#     alt: "Segmentation Mask Output"
+#     caption: "Model prediction vs Ground Truth"
+#     relative: false
+#     hiddenInSingle: true
+
 ---
 
 ### 🎯 The Objective
 Multiple Sclerosis (MS) is a rare neurological disease where early diagnosis is critical. The goal was to automate the segmentation of lesions in brain MRI scans to enhance diagnostic precision.
-![CESM GradCam Analysis](/images/cesm-cover.png)
-*Figure 1: Workflow.*
+![MS Lesion Segmentation Mask](static/images/ms-lesion-cover.png)
+*Figure 1: MS Lesion Segmentation Mask.*
 ### 🛠️ Tech Stack
 * **Core:** Python, TensorFlow, Keras
 * **Imaging:** OpenCV, PyDicom, PIL
