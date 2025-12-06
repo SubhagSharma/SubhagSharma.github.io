@@ -15,7 +15,7 @@ weight: 1
 
 ### 🎯 The Objective
 Multiple Sclerosis (MS) is a rare neurological disease where early diagnosis is critical. The goal was to automate the segmentation of lesions in brain MRI scans to enhance diagnostic precision.
-![MS Lesion Segmentation Mask](static/images/ms-lesion-cover.png)
+![MS Lesion Segmentation Mask](/images/brain-output.png)
 *Figure 1: MS Lesion Segmentation Mask.*
 ### 🛠️ Tech Stack
 * **Core:** Python, TensorFlow, Keras
