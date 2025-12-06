@@ -1,0 +1,59 @@
+baseURL = "https://subhag-sharma.github.io/"
+title = "Subhag Sharma"
+theme = "PaperMod"
+languageCode = "en-us"
+
+[params]
+  defaultTheme = "auto"
+  ShowShareButtons = true
+  ShowReadingTime = false
+  description = "M.Tech CSE at IIT Jammu | Medical Imaging & Deep Learning Researcher"
+
+  # This creates the "Hero" section on the homepage
+  [params.profileMode]
+    enabled = true
+    title = "Subhag Sharma"
+    subtitle = "M.Tech Researcher (CSE) @ IIT Jammu"
+    imageUrl = "https://github.com/username.png" # Replace with your GitHub profile pic URL later
+    imageTitle = "Subhag Sharma"
+
+    # Buttons on the home page
+    [[params.profileMode.buttons]]
+      name = "Resume"
+      url = "/resume.pdf"
+
+    [[params.profileMode.buttons]]
+      name = "Email"
+      url = "mailto:2025pcs0042@iitjammu.ac.in"
+
+    [[params.profileMode.buttons]]
+      name = "Google Scholar"
+      url = "#" # Add this later if you have one
+
+  # Social Icons
+  [[params.socialIcons]]
+    name = "linkedin"
+    url = "https://linkedin.com/in/subhag-sharma/"
+
+  [[params.socialIcons]]
+    name = "github"
+    url = "https://github.com/" # Add your GitHub username here
+
+# Menu Navigation
+[[menu.main]]
+  identifier = "experience"
+  name = "Experience"
+  url = "/experience/"
+  weight = 10
+
+[[menu.main]]
+  identifier = "publications"
+  name = "Publications"
+  url = "/publications/"
+  weight = 20
+
+[[menu.main]]
+  identifier = "projects"
+  name = "Projects"
+  url = "/projects/"
+  weight = 30
