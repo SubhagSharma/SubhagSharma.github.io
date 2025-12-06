@@ -37,7 +37,11 @@ languageCode = "en-us"
 
   [[params.socialIcons]]
     name = "github"
-    url = "https://github.com/" # Add your GitHub username here
+    url = "https://github.com/SubhagSharma" # Add your GitHub username here
+
+ [[params.socialIcons]]
+    name = "researchgate"
+    url = "https://www.researchgate.net/profile/Subhag-Sharma?ev=hdr_xprf"
 
 # Menu Navigation
 [[menu.main]]
