@@ -41,19 +41,25 @@ languageCode = "en-us"
 
 # Menu Navigation
 [[menu.main]]
+  identifier = "about"
+  name = "About"
+  url = "/about/"
+  weight = 10
+
+[[menu.main]]
   identifier = "experience"
   name = "Experience"
   url = "/experience/"
-  weight = 10
+  weight = 20
 
 [[menu.main]]
   identifier = "publications"
   name = "Publications"
   url = "/publications/"
-  weight = 20
+  weight = 30
 
 [[menu.main]]
   identifier = "projects"
   name = "Projects"
   url = "/projects/"
-  weight = 30
+  weight = 40
