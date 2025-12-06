@@ -1,7 +1,8 @@
 ---
 title: "About Me"
 hidemeta: true
-layout: "about"
+summary: "Education, Skills, and Bio"
+# layout: "about"
 ---
 
 I am a Master of Technology (M.Tech) candidate in Computer Science at the **Indian Institute of Technology (IIT), Jammu**, specializing in **Medical Image Processing** and **Deep Learning**.
