@@ -1,0 +1,6 @@
+.post-content h1 .anchor,
+.post-content h2 .anchor,
+.post-content h3 .anchor,
+.post-content h4 .anchor {
+    display: none !important;
+}

@@ -3,6 +3,12 @@ title: "CESM Breast Cancer Classification"
 summary: "Classifying probable malignant cases using subtracted images and Transfer Learning."
 tags: ["Transfer Learning", "GradCam", "Saliency Maps", "Oncology"]
 weight: 2
+# VISUAL HOOK: This appears on the list page and top of post
+cover:
+    image: "/images/cesm-output.png"
+    alt: "GradCam Attention Map Output"
+    caption: "Workflow"
+    relative: false
 ---
 
 ### 🎯 The Objective
@@ -15,3 +21,7 @@ To assist radio-oncologists in quickly identifying probable cancerous lumps in C
 
 ### 🏆 Results
 Preliminary performance metrics indicate the model outperforms standard radiologist benchmarks in specific classification tasks. The results were validated in collaboration with a radio-oncologist.
+
+**[📄 Read Full Research Report (PDF)](/reports/cesm-report.pdf)**
+
+<!-- **[💻 View Source Code (GitHub)](https://github.com/SubhagSharma/your-repo)** -->

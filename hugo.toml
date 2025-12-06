@@ -13,7 +13,7 @@ languageCode = "en-us"
   [params.profileMode]
     enabled = true
     title = "Subhag Sharma"
-    subtitle = "M.Tech Researcher (CSE) @ IIT Jammu"
+    subtitle = "M.Tech Student (CSE) @ IIT Jammu"
     imageUrl = "https://avatars.githubusercontent.com/u/78476626?v=4" # Replace with your GitHub profile pic URL later
     imageTitle = "Subhag Sharma"
 
