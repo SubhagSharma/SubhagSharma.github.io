@@ -22,7 +22,7 @@ At IIT Jammu, I am researching advanced architectures for **Medical Imaging**. M
 ### 🎓 Background
 * **M.Tech in CSE:** IIT Jammu (Current | CGPA: N.A.)
 * **B.Tech in CSE:** Shri Mata Vaishno Devi University (2024 | CGPA: 8.91)
-* **GATE CS 2025:** Secured **All India Rank 911** (Top ~0.5% of 1.7L candidates)
+
 ### 📚 Relevant Coursework
 
 | Domain | Subjects |
@@ -37,7 +37,14 @@ At IIT Jammu, I am researching advanced architectures for **Medical Imaging**. M
 * **AI/ML:** TensorFlow, PyTorch, Keras, OpenCV
 * **Cloud:** Google Cloud Platform (Core Infrastructure)
 
+### 📜 Certifications & Specializations
+
+* **Google Cloud Infrastructure:** Core Services & Foundation (Coursera/Google)
+* **AI for Medicine Specialization:** Deep Learning for Healthcare
+* **Machine Learning:** Supervised Learning, Advanced Learning Algorithms (Stanford Online)
+
 ### 🏆 Achievements
+* **GATE CS 2025:** Secured **All India Rank 911** (Top ~0.5% of 1.7L candidates)
 * **HackDefy:** 1st Place in Cybersecurity Hackathon (Govt of J&K)
 * **AgriThon:** 2nd Place in Agriculture Innovation Hackathon
 
