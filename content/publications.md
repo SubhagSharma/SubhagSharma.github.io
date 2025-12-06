@@ -9,7 +9,7 @@ summary: "Journal Articles & Conference Proceedings"
 **Plant Leaf Disease Classification Using Knowledge Distillation Methodologies**
 *Presented at CVIP 2024 | Published in Springer CCIS (Scopus)*
 Co-authored work on developing lightweight CNNs for deployment in resource-constrained agrarian regions.
-
+[DOI: 10.1007/978-3-031-93697-5_11](https://doi.org/10.1007/978-3-031-93697-5_11)
 **Revolutionizing Breast Cancer Detection: A Shallow Neural Network Approach**
 *Handbook of Deep Learning Models for Healthcare Data Processing (Scopus)*
 Proposed a lightweight CNN that outperforms standardized benchmarks for calcification classification.
@@ -28,7 +28,7 @@ Analyzed brain signals for lie detection using supervised learning, achieving re
 **Advances in Computer-Aided Detection of Retinal Diseases**
 *Springer LNNS*
 A comprehensive survey proposing a single CNN network for multi-disease classification.
-
+[DOI: 10.1007/978-3-031-60935-0_5](https://doi.org/10.1007/978-3-031-60935-0_5)
 ### 2023
 
 **Early Detection of Alzheimer's Disease Using Advanced ML Techniques**

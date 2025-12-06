@@ -5,7 +5,7 @@ languageCode = "en-us"
 
 [params]
   defaultTheme = "auto"
-  ShowShareButtons = true
+  ShowShareButtons = false
   ShowReadingTime = false
   description = "M.Tech CSE at IIT Jammu | Medical Imaging & Deep Learning Researcher"
 

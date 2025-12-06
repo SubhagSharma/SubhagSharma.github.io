@@ -1,6 +1,13 @@
-.post-content h1 .anchor,
+/* .post-content h1 .anchor,
 .post-content h2 .anchor,
 .post-content h3 .anchor,
 .post-content h4 .anchor {
     display: none !important;
+} */
+ /* NUCLEAR FIX: Hide the anchor # icon everywhere */
+a.anchor {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    width: 0 !important;
 }
