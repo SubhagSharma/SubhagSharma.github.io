@@ -9,6 +9,7 @@ cover:
     alt: "GradCam Attention Map Output"
     caption: "Workflow"
     relative: false
+    hiddenInSingle: true
 ---
 
 ### 🎯 The Objective

@@ -8,12 +8,14 @@ cover:
     image: "/images/brain-output.png"
     alt: "Segmentation Mask Output"
     caption: "Model prediction vs Ground Truth"
+    hiddenInSingle: true
     relative: false
 ---
 
 ### 🎯 The Objective
 Multiple Sclerosis (MS) is a rare neurological disease where early diagnosis is critical. The goal was to automate the segmentation of lesions in brain MRI scans to enhance diagnostic precision.
-
+![CESM GradCam Analysis](/images/cesm-cover.png)
+*Figure 1: Workflow.*
 ### 🛠️ Tech Stack
 * **Core:** Python, TensorFlow, Keras
 * **Imaging:** OpenCV, PyDicom, PIL
@@ -24,6 +26,7 @@ I performed a comprehensive evaluation of various U-Net combinations. By integra
 
 ### 📊 Impact
 The optimal configuration identified in this study demonstrated improved segmentation accuracy, potentially aiding clinicians in earlier diagnosis and treatment planning for MS patients.
+
 ### 📥 Downloads & Links
 
 **[📄 Read Full Research Report (PDF)](/reports/ms-lesion-report.pdf)**
