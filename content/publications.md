@@ -10,6 +10,7 @@ summary: "Journal Articles & Conference Proceedings"
 *Presented at CVIP 2024 | Published in Springer CCIS (Scopus)*
 Co-authored work on developing lightweight CNNs for deployment in resource-constrained agrarian regions.
 [DOI: 10.1007/978-3-031-93697-5_11](https://doi.org/10.1007/978-3-031-93697-5_11)
+
 **Revolutionizing Breast Cancer Detection: A Shallow Neural Network Approach**
 *Handbook of Deep Learning Models for Healthcare Data Processing (Scopus)*
 Proposed a lightweight CNN that outperforms standardized benchmarks for calcification classification.
