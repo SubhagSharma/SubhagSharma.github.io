@@ -14,8 +14,9 @@ weight: 2
 
 ### 🎯 The Objective
 To assist radio-oncologists in quickly identifying probable cancerous lumps in Contrast-Enhanced Spectral Mammography (CESM) images without immediate need for stat biopsies.
-![CESM GradCam Analysis](/images/cesm-output.png)
-*Figure 1: Workflow.*
+{{< figure align="center" src="/images/cesm-output.png" caption="Figure 1: Workflow." >}}
+<!-- ![CESM GradCam Analysis](/images/cesm-output.png) -->
+<!-- *Figure 1: Workflow.* -->
 ### 🧠 Approach
 * **Data Processing:** Utilized subtracted images to isolate potential masses.
 * **Architecture:** Implemented Transfer Learning on shallow neural networks to maintain efficiency.
