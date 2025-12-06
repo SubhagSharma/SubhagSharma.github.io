@@ -1,6 +1,6 @@
 ---
 title: "Publications"
-layout: "archives"
+# layout: "archives"
 summary: "Journal Articles & Conference Proceedings"
 ---
 

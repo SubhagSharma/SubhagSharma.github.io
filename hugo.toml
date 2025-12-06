@@ -1,4 +1,4 @@
-baseURL = "https://subhagsharma.github.io/"
+baseURL = "https://SubhagSharma.github.io/"
 title = "Subhag Sharma"
 theme = "PaperMod"
 languageCode = "en-us"
@@ -19,7 +19,7 @@ languageCode = "en-us"
 
     # Buttons on the home page
     [[params.profileMode.buttons]]
-      name = "resume"
+      name = "Resume"
       url = "/resume.pdf"
 
     [[params.profileMode.buttons]]
