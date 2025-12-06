@@ -1,0 +1,17 @@
+---
+title: "CESM Breast Cancer Classification"
+summary: "Classifying probable malignant cases using subtracted images and Transfer Learning."
+tags: ["Transfer Learning", "GradCam", "Saliency Maps", "Oncology"]
+weight: 2
+---
+
+### 🎯 The Objective
+To assist radio-oncologists in quickly identifying probable cancerous lumps in Contrast-Enhanced Spectral Mammography (CESM) images without immediate need for stat biopsies.
+
+### 🧠 Approach
+* **Data Processing:** Utilized subtracted images to isolate potential masses.
+* **Architecture:** Implemented Transfer Learning on shallow neural networks to maintain efficiency.
+* **Explainability:** Integrated **Saliency Heatmapping** and **GradCam** to visualize *why* the model made a prediction—crucial for medical validation.
+
+### 🏆 Results
+Preliminary performance metrics indicate the model outperforms standard radiologist benchmarks in specific classification tasks. The results were validated in collaboration with a radio-oncologist.
