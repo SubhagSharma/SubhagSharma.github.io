@@ -49,7 +49,7 @@ At IIT Jammu, I am researching advanced architectures for **Medical Imaging**. M
 * **AgriThon:** 2nd Place in Agriculture Innovation Hackathon
 
 ### 🤝 Social & Volunteering
-When I am not training models, I volunteer with the **National Social Service (NSS)** or organize technical conferences to foster research communities.
+When I am not training models, I volunteer with the **National Social Service (NSS)** or organize technical conferences to foster research communities. I also served as a **ML Co-Lead** for local **GDSC** chapter at SMVDU during my bachelor's degree.
 
 ### 🎵 Beyond the Screen
 While my academic focus is on deep learning, my creative side is rooted in **Indian Classical Music**. I am a passionate instrumentalist, playing both the **Sitar** and **Tabla**. In my free time, I enjoy exploring the depths of Indian Classical Music and at times appreciating **Western Classical** compositions along with **Sufi Music** like Ghazals and Qawalis.
