@@ -5,16 +5,16 @@ summary: "Education, Skills, and Bio"
 # layout: "about"
 ---
 
-I am a Master of Technology (M.Tech) candidate in Computer Science at the **Indian Institute of Technology (IIT), Jammu**, specializing in **Medical Image Processing** and **Deep Learning**.
+I am a Master of Technology (M.Tech) candidate in Computer Science at the **Indian Institute of Technology (IIT), Jammu**, with deep interests in **Medical Image Processing** and **Deep Learning**.
 
-My research philosophy centers on **Efficiency in AI**—specifically, designing lightweight Convolutional Neural Networks (CNNs) that can perform complex diagnostic tasks (like tumor segmentation or disease classification) on resource-constrained devices.
+My research idealogy centers on and around **Efficiency in AI**—specifically, designing lightweight Convolutional Neural Networks (CNNs) that can perform complex diagnostic tasks (like tumor segmentation or disease classification) on resource-constrained devices.
 
 ### 🎓 Education
 
-| Degree | Institute | Performance | Year |
+| Degree | Institute | CGPA | Year |
 | :--- | :--- | :--- | :--- |
-| **M.Tech (CSE)** | IIT Jammu | **NA** | 2027 (Exp) |
-| **B.Tech (CSE)** | SMVDU | **8.91 CGPA** | 2024 |
+| **M.Tech (CSE)** | IIT Jammu | **8.79 (Cur.)** | 2027 (Exp.) |
+| **B.Tech (CSE)** | SMVDU | **8.91** | 2024 |
 
 ### 🔭 Current Focus
 At IIT Jammu, I am researching advanced architectures for **Medical Imaging**. My goal is to bridge the gap between heavy, computational "black box" models and practical, deployable healthcare solutions.
