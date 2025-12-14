@@ -20,7 +20,7 @@ My research idealogy centers on and around **Efficiency in AI**—specifically, 
 At IIT Jammu, I am researching advanced architectures for **Medical Imaging**. My goal is to bridge the gap between heavy, computational "black box" models and practical, deployable healthcare solutions.
 
 ### 🎓 Background
-* **M.Tech in CSE:** IIT Jammu (Current | CGPA: N.A.)
+* **M.Tech in CSE:** IIT Jammu (Current | CGPA: 8.79 (Current))
 * **B.Tech in CSE:** Shri Mata Vaishno Devi University (2024 | CGPA: 8.91)
 
 ### 📚 Relevant Coursework
@@ -47,6 +47,7 @@ At IIT Jammu, I am researching advanced architectures for **Medical Imaging**. M
 * **GATE CS 2025:** Secured **All India Rank 911** (Top ~0.5% of 1.7L candidates)
 * **HackDefy:** 1st Place in Cybersecurity Hackathon (Govt of J&K)
 * **AgriThon:** 2nd Place in Agriculture Innovation Hackathon
+* **Distinction:** For best performance in Academic, Co-Curricular and Extra Curricular Activities during undergraduate degree
 
 ### 🤝 Social & Volunteering
 When I am not training models, I volunteer with the **National Social Service (NSS)** or organize technical conferences to foster research communities. I also served as a **ML Co-Lead** for local **GDSC** chapter at SMVDU during my bachelor's degree.
