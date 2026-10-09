@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Admin | Subhag Sharma</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        // Replace with your actual Firebase config object
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_MESSAGING_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Check authentication state
+        onAuthStateChanged(auth, (user) => {
+            const loginSection = document.getElementById('login-section');
+            const editorSection = document.getElementById('editor-section');
+            const userEmail = document.getElementById('user-email');
+
+            if (user) {
+                loginSection.classList.add('hidden');
+                editorSection.classList.remove('hidden');
+                userEmail.textContent = user.email;
+            } else {
+                loginSection.classList.remove('hidden');
+                editorSection.classList.add('hidden');
+            }
+        });
+
+        // Handle Login
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorEl = document.getElementById('login-error');
+
+            try {
+                errorEl.textContent = '';
+                await signInWithEmailAndPassword(auth, email, password);
+            } catch (error) {
+                errorEl.textContent = "Authentication failed: " + error.message;
+            }
+        });
+
+        // Handle Sign Out
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            signOut(auth);
+        });
+
+        // Handle Publish Post
+        document.getElementById('post-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const title = document.getElementById('post-title').value;
+            const content = document.getElementById('post-content').value;
+            const statusEl = document.getElementById('post-status');
+
+            try {
+                statusEl.className = "text-blue-400 font-medium";
+                statusEl.textContent = "Publishing...";
+
+                await addDoc(collection(db, "posts"), {
+                    title: title,
+                    content: content,
+                    date: serverTimestamp()
+                });
+
+                statusEl.className = "text-green-400 font-medium";
+                statusEl.textContent = "Post published successfully!";
+                document.getElementById('post-form').reset();
+            } catch (error) {
+                statusEl.className = "text-red-400 font-medium";
+                statusEl.textContent = "Error publishing post: " + error.message;
+            }
+        });
+    </script>
+</head>
+<body class="bg-gray-900 text-gray-200 font-sans antialiased min-h-screen flex flex-col justify-center items-center p-4">
+
+    <!-- Login Form -->
+    <div id="login-section" class="w-full max-w-md bg-gray-950 p-8 rounded-xl border border-gray-800 shadow-2xl">
+        <h1 class="text-2xl font-bold text-white mb-6 text-center">Blog Admin Sign In</h1>
+        <form id="login-form" class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-400 mb-1">Email</label>
+                <input type="email" id="email" required class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-400 mb-1">Password</label>
+                <input type="password" id="password" required class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500">
+            </div>
+            <div id="login-error" class="text-red-400 text-sm"></div>
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg transition duration-200">
+                Log In
+            </button>
+        </form>
+    </div>
+
+    <!-- Post Editor -->
+    <div id="editor-section" class="w-full max-w-3xl bg-gray-950 p-8 rounded-xl border border-gray-800 shadow-2xl hidden space-y-6">
+        <div class="flex justify-between items-center border-b border-gray-800 pb-4">
+            <div>
+                <h1 class="text-2xl font-bold text-white">Create New Post</h1>
+                <p class="text-xs text-gray-400">Logged in as <span id="user-email" class="text-blue-400"></span></p>
+            </div>
+            <button id="logout-btn" class="text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-1.5 rounded-lg transition">
+                Sign Out
+            </button>
+        </div>
+
+        <form id="post-form" class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-400 mb-1">Post Title</label>
+                <input type="text" id="post-title" placeholder="e.g. Rethinking Explainable AI Architecture" required class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-400 mb-1">Content (HTML or Plain Text)</label>
+                <textarea id="post-content" rows="10" placeholder="Write your post here... Use <p>, <h3>, <code>, or standard text." required class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white font-mono text-sm focus:outline-none focus:border-blue-500"></textarea>
+            </div>
+            <div class="flex justify-between items-center pt-2">
+                <span id="post-status"></span>
+                <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2.5 px-6 rounded-lg transition duration-200">
+                    Publish Post
+                </button>
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>
