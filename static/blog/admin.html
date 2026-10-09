@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,11 +10,47 @@
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     
+    <script>
+        // Configure Tailwind for class-based dark mode
+        tailwind.config = { darkMode: 'class' }
+        
+        // Theme toggle logic
+        function toggleTheme() {
+            const html = document.documentElement;
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                html.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // Apply saved theme on load
+        if (localStorage.getItem('theme') === 'light') {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+
     <style>
-        /* Styling the editor to look clean inside the dark theme */
-        .ql-toolbar { background-color: #f3f4f6; border-top-left-radius: 0.5rem; border-top-right-radius: 0.5rem; border: none !important; }
-        .ql-container { background-color: #ffffff; color: #000000; font-size: 16px; border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem; height: 300px; border: none !important; }
-        .ql-editor { font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+        /* Quill Editor Theme Support (Adapts to Light/Dark Mode) */
+        .ql-toolbar { border-top-left-radius: 0.5rem; border-top-right-radius: 0.5rem; transition: background-color 0.3s, border-color 0.3s; }
+        .ql-container { font-size: 16px; border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem; height: 350px; font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; transition: background-color 0.3s, border-color 0.3s, color 0.3s; }
+        
+        /* Light Mode Styles for Quill */
+        html:not(.dark) .ql-toolbar { background-color: #f9fafb; border-color: #e5e7eb !important; }
+        html:not(.dark) .ql-container { background-color: #ffffff; color: #111827; border-color: #e5e7eb !important; }
+        
+        /* Dark Mode Styles for Quill */
+        html.dark .ql-toolbar { background-color: #242526; border-color: #3a3b3c !important; }
+        html.dark .ql-container { background-color: #18191a; color: #e4e6eb; border-color: #3a3b3c !important; }
+        
+        /* Dark Mode Icon Colors */
+        html.dark .ql-picker-label { color: #a9a9b3; }
+        html.dark .ql-stroke { stroke: #a9a9b3; }
+        html.dark .ql-fill { fill: #a9a9b3; }
+        html.dark .ql-picker-options { background-color: #242526; border-color: #3a3b3c; }
+        html.dark .ql-snow .ql-picker.ql-expanded .ql-picker-options { border-color: #555; }
     </style>
 
     <script type="module">
@@ -23,7 +59,7 @@
         import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         // ⚠️ CRITICAL: Replace with your actual Firebase config keys ⚠️
-      const firebaseConfig = {
+        const firebaseConfig = {
 
     apiKey: "AIzaSyBjIgZGfD-BXW8f0t7MKis0MULrOQPZPPE",
 
@@ -46,7 +82,6 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // Initialize Quill Editor once the DOM is loaded
         let quill;
         document.addEventListener("DOMContentLoaded", () => {
             quill = new Quill('#editor-container', {
@@ -64,7 +99,6 @@
             });
         });
 
-        // Check authentication state
         onAuthStateChanged(auth, (user) => {
             const loginSection = document.getElementById('login-section');
             const editorSection = document.getElementById('editor-section');
@@ -80,7 +114,6 @@
             }
         });
 
-        // Handle Login
         document.getElementById('login-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = document.getElementById('email').value;
@@ -95,27 +128,22 @@
             }
         });
 
-        // Handle Sign Out
-        document.getElementById('logout-btn').addEventListener('click', () => {
-            signOut(auth);
-        });
+        document.getElementById('logout-btn').addEventListener('click', () => signOut(auth));
 
-        // Handle Publish Post
         document.getElementById('post-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const title = document.getElementById('post-title').value;
-            // Get the HTML content directly from Quill
             const content = quill.root.innerHTML; 
             const statusEl = document.getElementById('post-status');
 
             if (quill.getText().trim().length === 0) {
-                statusEl.className = "text-red-400 font-medium";
+                statusEl.className = "text-red-500 font-medium";
                 statusEl.textContent = "Post content cannot be empty.";
                 return;
             }
 
             try {
-                statusEl.className = "text-blue-400 font-medium";
+                statusEl.className = "text-blue-500 font-medium";
                 statusEl.textContent = "Publishing...";
 
                 await addDoc(collection(db, "posts"), {
@@ -124,72 +152,87 @@
                     date: serverTimestamp()
                 });
 
-                statusEl.className = "text-green-400 font-medium";
+                statusEl.className = "text-green-500 font-medium";
                 statusEl.textContent = "Post published successfully!";
                 document.getElementById('post-form').reset();
-                quill.setContents([]); // Clear the editor
+                quill.setContents([]); 
             } catch (error) {
-                statusEl.className = "text-red-400 font-medium";
+                statusEl.className = "text-red-500 font-medium";
                 statusEl.textContent = "Error publishing post: " + error.message;
             }
         });
     </script>
 </head>
-<body class="bg-gray-900 text-gray-200 font-sans antialiased min-h-screen flex flex-col justify-center items-center p-4">
+<body class="bg-[#fafafa] dark:bg-[#1d1e20] text-gray-900 dark:text-[#a9a9b3] min-h-screen flex flex-col transition-colors duration-300 selection:bg-gray-300 dark:selection:bg-gray-700">
 
-    <!-- Login Form -->
-    <div id="login-section" class="w-full max-w-md bg-gray-950 p-8 rounded-xl border border-gray-800 shadow-2xl">
-        <h1 class="text-2xl font-bold text-white mb-6 text-center">Blog Admin Sign In</h1>
-        <form id="login-form" class="space-y-4">
-            <div>
-                <label class="block text-sm font-medium text-gray-400 mb-1">Email</label>
-                <input type="email" id="email" required class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500">
-            </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-400 mb-1">Password</label>
-                <input type="password" id="password" required class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500">
-            </div>
-            <div id="login-error" class="text-red-400 text-sm"></div>
-            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg transition duration-200">
-                Log In
-            </button>
-        </form>
-    </div>
-
-    <!-- Post Editor -->
-    <div id="editor-section" class="w-full max-w-4xl bg-gray-950 p-8 rounded-xl border border-gray-800 shadow-2xl hidden space-y-6">
-        <div class="flex justify-between items-center border-b border-gray-800 pb-4">
-            <div>
-                <h1 class="text-2xl font-bold text-white">Create New Post</h1>
-                <p class="text-xs text-gray-400">Logged in as <span id="user-email" class="text-blue-400"></span></p>
-            </div>
-            <button id="logout-btn" class="text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-1.5 rounded-lg transition">
-                Sign Out
+    <!-- Header / Navigation -->
+    <header class="max-w-4xl w-full mx-auto px-6 py-6 flex justify-between items-center border-b border-gray-200 dark:border-[#333]">
+        <a href="/" class="text-2xl font-bold text-gray-900 dark:text-white tracking-tight hover:opacity-80 transition">Subhag Sharma</a>
+        <div class="flex items-center space-x-6">
+            <nav class="space-x-4 text-sm font-medium">
+                <a href="/" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition">Portfolio</a>
+                <a href="/blog/" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition">Blog</a>
+            </nav>
+            <button onclick="toggleTheme()" class="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-800 transition" title="Toggle Theme">
+                <svg class="w-5 h-5 text-gray-800 dark:text-gray-200 hidden dark:block" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"/></svg>
+                <svg class="w-5 h-5 text-gray-800 dark:text-gray-200 block dark:hidden" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/></svg>
             </button>
         </div>
+    </header>
 
-        <form id="post-form" class="space-y-4">
-            <div>
-                <label class="block text-sm font-medium text-gray-400 mb-1">Post Title</label>
-                <input type="text" id="post-title" placeholder="e.g. Rethinking Explainable AI Architecture" required class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500">
-            </div>
-            
-            <!-- Rich Text Editor Container -->
-            <div>
-                <label class="block text-sm font-medium text-gray-400 mb-1">Content</label>
-                <div class="border border-gray-700 rounded-lg shadow-sm">
-                    <div id="editor-container"></div>
+    <main class="flex-grow flex flex-col justify-center items-center p-6">
+        
+        <!-- Login Form -->
+        <div id="login-section" class="w-full max-w-md bg-white dark:bg-[#242526] p-8 rounded-xl border border-gray-200 dark:border-[#3a3b3c] shadow-md">
+            <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 text-center">Blog Admin</h1>
+            <form id="login-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Email</label>
+                    <input type="email" id="email" required class="w-full bg-gray-50 dark:bg-[#18191a] border border-gray-300 dark:border-[#3a3b3c] rounded-lg px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 dark:focus:border-blue-400 transition">
                 </div>
-            </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Password</label>
+                    <input type="password" id="password" required class="w-full bg-gray-50 dark:bg-[#18191a] border border-gray-300 dark:border-[#3a3b3c] rounded-lg px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 dark:focus:border-blue-400 transition">
+                </div>
+                <div id="login-error" class="text-red-500 text-sm"></div>
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-200">
+                    Sign In
+                </button>
+            </form>
+        </div>
 
-            <div class="flex justify-between items-center pt-4">
-                <span id="post-status"></span>
-                <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2.5 px-6 rounded-lg transition duration-200">
-                    Publish Post
+        <!-- Post Editor -->
+        <div id="editor-section" class="w-full max-w-4xl bg-white dark:bg-[#242526] p-8 rounded-xl border border-gray-200 dark:border-[#3a3b3c] shadow-md hidden space-y-6">
+            <div class="flex justify-between items-center border-b border-gray-200 dark:border-[#3a3b3c] pb-4">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Create New Post</h1>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Logged in as <span id="user-email" class="text-blue-500 dark:text-blue-400"></span></p>
+                </div>
+                <button id="logout-btn" class="text-xs bg-gray-200 dark:bg-[#3a3b3c] hover:bg-gray-300 dark:hover:bg-[#4a4b4c] text-gray-800 dark:text-gray-200 px-4 py-2 rounded-lg transition">
+                    Sign Out
                 </button>
             </div>
-        </form>
-    </div>
+
+            <form id="post-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Post Title</label>
+                    <input type="text" id="post-title" placeholder="e.g. Rethinking Explainable AI Architecture" required class="w-full bg-gray-50 dark:bg-[#18191a] border border-gray-300 dark:border-[#3a3b3c] rounded-lg px-4 py-3 text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 dark:focus:border-blue-400 transition">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Content</label>
+                    <div id="editor-container"></div>
+                </div>
+
+                <div class="flex justify-between items-center pt-4">
+                    <span id="post-status" class="text-sm"></span>
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-8 rounded-lg transition duration-200">
+                        Publish Post
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
 
 </body>
 </html>
