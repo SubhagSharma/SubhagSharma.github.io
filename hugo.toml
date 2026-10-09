@@ -42,6 +42,9 @@ languageCode = "en-us"
  [[params.socialIcons]]
     name = "researchgate"
     url = "https://www.researchgate.net/profile/Subhag-Sharma?ev=hdr_xprf"
+    [[params.profileMode.buttons]]
+name = "Blog"
+url = "/blog/"
 
 # Menu Navigation
 [[menu.main]]
