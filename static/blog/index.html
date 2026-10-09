@@ -3,14 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Subhag Sharma | AI & Tech Blog</title>
+    <title>Subhag Sharma | Blog</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #2e2e33;
+            color: #rgba(255, 255, 255, 0.8);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+    </style>
     <!-- Firebase SDKs -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-        // TODO: Replace with your actual Firebase config object
+        // Replace with your actual Firebase config object
         const firebaseConfig = {
             apiKey: "YOUR_API_KEY",
             authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
@@ -23,7 +30,6 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Fetch posts from Firestore
         async function loadPosts() {
             const postsContainer = document.getElementById('posts-container');
             try {
@@ -41,12 +47,12 @@
                     const dateString = post.date ? new Date(post.date.toDate()).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'Recent';
                     
                     html += `
-                        <article class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 transition hover:border-blue-500 duration-300">
-                            <header class="mb-4">
-                                <h2 class="text-2xl font-bold text-gray-100 mb-2">${post.title}</h2>
-                                <time class="text-sm text-blue-400 font-mono">${dateString}</time>
+                        <article class="bg-[#37373c] p-6 rounded-lg mb-6 border border-[#414146] hover:border-gray-500 transition duration-200">
+                            <header class="mb-2">
+                                <h2 class="text-2xl font-bold text-gray-100">${post.title}</h2>
+                                <time class="text-xs text-gray-400">${dateString}</time>
                             </header>
-                            <div class="text-gray-300 leading-relaxed space-y-4">
+                            <div class="text-gray-300 text-sm leading-relaxed space-y-3">
                                 ${post.content}
                             </div>
                         </article>
@@ -62,67 +68,52 @@
         window.onload = loadPosts;
     </script>
 </head>
-<body class="bg-gray-900 text-gray-200 font-sans antialiased selection:bg-blue-600 selection:text-white min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col justify-between selection:bg-gray-700 selection:text-white">
 
-    <!-- Navigation -->
-    <nav class="bg-gray-950 border-b border-gray-800 sticky top-0 z-10">
-        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
-            <a href="/" class="text-xl font-bold tracking-tight text-white hover:text-blue-400 transition">
-                Subhag Sharma
-            </a>
-            <div class="flex space-x-6 text-sm font-medium font-mono">
-                <a href="/" class="text-gray-400 hover:text-white transition">Portfolio</a>
-                <a href="/blog" class="text-blue-400">Blog</a>
-            </div>
-        </div>
-    </nav>
+    <!-- Header / Navigation (Matching PaperMod) -->
+    <header class="max-w-4xl w-full mx-auto px-6 py-6 flex justify-between items-center border-b border-[#37373c]">
+        <a href="/" class="text-2xl font-bold text-white tracking-tight hover:opacity-80 transition">Subhag Sharma</a>
+        <nav class="space-x-6 text-sm font-medium">
+            <a href="/" class="text-gray-400 hover:text-white transition">Portfolio</a>
+            <a href="/blog/" class="text-white border-b-2 border-white pb-1">Blog</a>
+        </nav>
+    </header>
 
     <!-- Main Content -->
-    <main class="flex-grow max-w-6xl mx-auto px-4 py-12 w-full grid grid-cols-1 lg:grid-cols-12 gap-12">
+    <main class="max-w-4xl w-full mx-auto px-6 py-10 flex-grow grid grid-cols-1 md:grid-cols-12 gap-10">
         
-        <!-- Sidebar Profile -->
-        <aside class="lg:col-span-4 space-y-8">
-            <div class="bg-gray-950 p-6 rounded-xl border border-gray-800">
-                <div class="w-20 h-20 bg-blue-600 rounded-full mb-4 flex items-center justify-center text-2xl font-bold text-white shadow-lg">
-                    SS
-                </div>
-                <h1 class="text-xl font-bold text-white mb-2">Thoughts & Research</h1>
-                <p class="text-gray-400 text-sm leading-relaxed mb-4">
-                    I am an M.Tech student at IIT Jammu specializing in Explainable AI (XAI), medical imaging, and computer vision. My daily workflow runs on Ubuntu, PyTorch, and C++.
-                </p>
-                <p class="text-gray-400 text-sm leading-relaxed mb-6">
-                    While my academic research demands rigorous mathematical derivations and low-level system engineering, this blog is a broader space. Here, I share my perspectives on current industry trends in artificial intelligence, cognitive AI paradigms, and where machine learning architectures are heading next.
-                </p>
+        <!-- Profile Sidebar -->
+        <aside class="md:col-span-4 space-y-6">
+            <div class="bg-[#37373c] p-6 rounded-lg border border-[#414146] text-center md:text-left">
+                <!-- Profile Image -->
+                <img src="/images/avatar.jpg" alt="Subhag Sharma" class="w-24 h-24 rounded-full object-cover mx-auto md:mx-0 mb-4 border-2 border-gray-600 shadow-md" onerror="this.src='https://github.com/subhagsharma.png'">
                 
-                <div class="flex flex-wrap gap-2">
-                    <span class="px-3 py-1 bg-gray-800 text-xs text-gray-300 rounded-full border border-gray-700">AI Trends</span>
-                    <span class="px-3 py-1 bg-gray-800 text-xs text-gray-300 rounded-full border border-gray-700">XAI</span>
-                    <span class="px-3 py-1 bg-gray-800 text-xs text-gray-300 rounded-full border border-gray-700">PyTorch</span>
-                    <span class="px-3 py-1 bg-gray-800 text-xs text-gray-300 rounded-full border border-gray-700">Deep Learning</span>
-                </div>
+                <h1 class="text-xl font-bold text-white mb-1">Thoughts & Research</h1>
+                <p class="text-gray-300 text-xs leading-relaxed mb-4">
+                    M.Tech student at IIT Jammu specializing in Explainable AI (XAI), medical imaging, and computer vision.
+                </p>
+                <p class="text-gray-400 text-xs leading-relaxed">
+                    Sharing perspectives on AI trends, cognitive AI paradigms, and machine learning architectures.
+                </p>
             </div>
         </aside>
 
         <!-- Blog Feed -->
-        <div class="lg:col-span-8">
-            <div class="mb-8 border-b border-gray-800 pb-4 flex justify-between items-end">
-                <h2 class="text-3xl font-bold text-white">Latest Transmissions</h2>
-            </div>
-            
-            <div id="posts-container" class="space-y-8">
-                <!-- Posts will be injected here dynamically by Firebase -->
+        <section class="md:col-span-8">
+            <h2 class="text-xl font-bold text-white mb-6 border-b border-[#37373c] pb-2">Posts</h2>
+            <div id="posts-container">
                 <div class="animate-pulse space-y-4">
-                    <div class="h-8 bg-gray-800 rounded w-3/4"></div>
-                    <div class="h-4 bg-gray-800 rounded w-1/4"></div>
-                    <div class="h-24 bg-gray-800 rounded w-full mt-4"></div>
+                    <div class="h-6 bg-[#37373c] rounded w-3/4"></div>
+                    <div class="h-4 bg-[#37373c] rounded w-1/4"></div>
+                    <div class="h-20 bg-[#37373c] rounded w-full"></div>
                 </div>
             </div>
-        </div>
+        </section>
 
     </main>
 
-    <footer class="bg-gray-950 border-t border-gray-800 mt-12 py-8 text-center">
-        <p class="text-gray-500 text-sm font-mono">&copy; 2026 Subhag Sharma. All rights reserved.</p>
+    <footer class="max-w-4xl w-full mx-auto px-6 py-8 text-center text-xs text-gray-500 border-t border-[#37373c]">
+        © 2026 Subhag Sharma · Powered by PaperMod & Firebase
     </footer>
 
 </body>
