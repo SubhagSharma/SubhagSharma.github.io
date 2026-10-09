@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subhag Sharma's Blog</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.260.0/lucide.min.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Merriweather', 'serif'],
+                    },
+                    colors: {
+                        zinc: {
+                            850: '#1f1f22',
+                            900: '#18181b',
+                            950: '#09090b',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #09090b; /* zinc-950 */
+            color: #e4e4e7; /* zinc-200 */
+        }
+        .post-content {
+            white-space: pre-wrap;
+        }
+        /* Custom Scrollbar for a premium feel */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #18181b; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #3f3f46; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #52525b; 
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col font-sans selection:bg-indigo-500/30">
+
+    <header class="sticky top-0 z-40 w-full backdrop-blur-md bg-zinc-950/80 border-b border-zinc-800">
+        <div class="container mx-auto px-4 md:px-6 h-16 flex items-center justify-between">
+            <h1 class="text-xl md:text-2xl font-serif font-bold tracking-tight text-zinc-100 flex items-center gap-2">
+                <i data-lucide="book-open" class="w-6 h-6 text-indigo-400"></i>
+                Subhag Sharma
+            </h1>
+            <button id="openModalBtn" class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center gap-2 shadow-sm shadow-indigo-900/50">
+                <i data-lucide="pen-tool" class="w-4 h-4"></i>
+                <span class="hidden sm:inline">Write Post</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 md:px-6 py-8 flex-grow">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            
+            <aside class="lg:col-span-1 space-y-6">
+                <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-6 shadow-xl shadow-black/20">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-xl font-serif font-bold text-white shadow-lg">
+                            SS
+                        </div>
+                        <div>
+                            <h2 class="font-serif font-bold text-lg text-zinc-100">Subhag Sharma</h2>
+                            <p class="text-xs text-zinc-400 font-medium">M.Tech CSE at IIT Jammu</p>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4 text-sm text-zinc-300 leading-relaxed">
+                        <p>
+                            Hello! I'm an M.Tech CSE student at <strong>IIT Jammu</strong>. My research focuses on <span class="text-indigo-300 font-medium">Explainable AI (XAI)</span> and its critical applications in medical imaging, striving to make deep learning models more transparent.
+                        </p>
+                        
+                        <div>
+                            <h3 class="text-zinc-100 font-semibold mb-2 flex items-center gap-2">
+                                <i data-lucide="cpu" class="w-4 h-4 text-indigo-400"></i>
+                                Specializations
+                            </h3>
+                            <ul class="list-disc list-inside space-y-1 text-zinc-400 ml-1">
+                                <li>Explainable AI (XAI)</li>
+                                <li>Medical Imaging</li>
+                                <li>Deep Learning</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h3 class="text-zinc-100 font-semibold mb-2 flex items-center gap-2">
+                                <i data-lucide="terminal" class="w-4 h-4 text-indigo-400"></i>
+                                Tech Stack
+                            </h3>
+                            <p class="text-zinc-400">
+                                Proficient in <span class="text-orange-400 font-medium">Python</span>, <span class="text-red-400 font-medium">PyTorch</span>, and <span class="text-blue-400 font-medium">C++</span> for developing robust models.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <div class="lg:col-span-3 space-y-6" id="postsContainer">
+                <!-- Loading State -->
+                <div id="loadingState" class="flex flex-col items-center justify-center py-20 text-zinc-500">
+                    <i data-lucide="loader-2" class="w-8 h-8 animate-spin mb-4 text-indigo-500"></i>
+                    <p>Loading journal entries...</p>
+                </div>
+                
+                <!-- Posts will be injected here via JS -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Create Post Modal (Hidden by default) -->
+    <div id="createPostModal" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+        <div class="bg-zinc-900 border border-zinc-700 rounded-xl w-full max-w-2xl shadow-2xl overflow-hidden transform scale-95 transition-transform duration-300 modal-content">
+            <div class="px-6 py-4 border-b border-zinc-800 flex items-center justify-between bg-zinc-950/50">
+                <h3 class="text-lg font-serif font-bold text-zinc-100">Draft New Post</h3>
+                <button id="closeModalBtn" class="text-zinc-400 hover:text-zinc-100 transition-colors">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            
+            <form id="postForm" class="p-6 space-y-4">
+                <div id="errorBox" class="hidden bg-red-900/50 border border-red-500/50 text-red-200 px-4 py-3 rounded-md text-sm"></div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="col-span-2 space-y-1">
+                        <label for="postTitle" class="block text-sm font-medium text-zinc-400">Title</label>
+                        <input type="text" id="postTitle" required placeholder="e.g., Understanding Grad-CAM in PyTorch" 
+                            class="w-full bg-zinc-800 border border-zinc-700 rounded-md px-4 py-2 text-zinc-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder-zinc-500 transition-shadow">
+                    </div>
+                    <div class="space-y-1">
+                        <label for="postDate" class="block text-sm font-medium text-zinc-400">Date</label>
+                        <input type="date" id="postDate" required 
+                            class="w-full bg-zinc-800 border border-zinc-700 rounded-md px-4 py-2 text-zinc-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow [color-scheme:dark]">
+                    </div>
+                </div>
+
+                <div class="space-y-1">
+                    <label for="postContent" class="block text-sm font-medium text-zinc-400">Content</label>
+                    <textarea id="postContent" required rows="8" placeholder="Write your thoughts, observations, or research notes here..."
+                        class="w-full bg-zinc-800 border border-zinc-700 rounded-md px-4 py-3 text-zinc-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder-zinc-500 transition-shadow resize-y font-mono text-sm"></textarea>
+                </div>
+
+                <div class="pt-4 flex justify-end gap-3 border-t border-zinc-800">
+                    <button type="button" id="cancelBtn" class="px-4 py-2 rounded-md text-sm font-medium text-zinc-300 hover:text-white hover:bg-zinc-800 transition-colors">
+                        Cancel
+                    </button>
+                    <button type="submit" id="submitBtn" class="bg-indigo-600 hover:bg-indigo-500 text-white px-5 py-2 rounded-md text-sm font-medium transition-colors flex items-center gap-2 shadow-sm shadow-indigo-900/50">
+                        <i data-lucide="send" class="w-4 h-4"></i>
+                        Publish
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Environment variables
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'tajamul-blog-preview';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
+            // Fallback config if environment not completely set, usually handled by container
+            projectId: "demo-project"
+        };
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        // DOM Elements
+        const modal = document.getElementById('createPostModal');
+        const modalContent = modal.querySelector('.modal-content');
+        const openModalBtn = document.getElementById('openModalBtn');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const postForm = document.getElementById('postForm');
+        const postsContainer = document.getElementById('postsContainer');
+        const loadingState = document.getElementById('loadingState');
+        const errorBox = document.getElementById('errorBox');
+        const submitBtn = document.getElementById('submitBtn');
+
+        let currentUser = null;
+        let unsubscribePosts = null;
+
+        // Initialize Icons
+        lucide.createIcons();
+
+        // Set default date to today
+        document.getElementById('postDate').valueAsDate = new Date();
+
+        async function initializeAuth() {
+            try {
+                if (initialAuthToken) {
+                    await signInWithCustomToken(auth, initialAuthToken);
+                } else {
+                    await signInAnonymously(auth);
+                }
+            } catch (error) {
+                console.error("Auth error:", error);
+                showError("Authentication failed. Database features may not work.");
+            }
+        }
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user;
+                loadPosts(); // Only load posts after auth
+            } else {
+                currentUser = null;
+                if (unsubscribePosts) unsubscribePosts();
+            }
+        });
+
+        function openModal() {
+            modal.classList.remove('hidden');
+            // Trigger reflow
+            void modal.offsetWidth;
+            modal.classList.remove('opacity-0');
+            modalContent.classList.remove('scale-95');
+            modalContent.classList.add('scale-100');
+        }
+
+        function closeModal() {
+            modal.classList.add('opacity-0');
+            modalContent.classList.remove('scale-100');
+            modalContent.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                postForm.reset();
+                document.getElementById('postDate').valueAsDate = new Date();
+                errorBox.classList.add('hidden');
+            }, 300); // match transition duration
+        }
+
+        function showError(message) {
+            errorBox.textContent = message;
+            errorBox.classList.remove('hidden');
+            setTimeout(() => {
+                errorBox.classList.add('hidden');
+            }, 5000);
+        }
+
+        openModalBtn.addEventListener('click', openModal);
+        closeModalBtn.addEventListener('click', closeModal);
+        cancelBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+
+        function loadPosts() {
+            if (!currentUser) return;
+
+            // RULE 1: Strict paths
+            const postsRef = collection(db, 'artifacts', appId, 'public', 'data', 'posts');
+            
+            // RULE 2: No complex queries. We fetch all and sort in memory.
+            const q = query(postsRef);
+
+            if (unsubscribePosts) unsubscribePosts();
+
+            unsubscribePosts = onSnapshot(q, (snapshot) => {
+                const posts = [];
+                snapshot.forEach((doc) => {
+                    posts.push({ id: doc.id, ...doc.data() });
+                });
+
+                // Sort posts by date descending
+                posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+                
+                renderPosts(posts);
+            }, (error) => {
+                console.error("Error fetching posts:", error);
+                loadingState.innerHTML = `<div class="text-red-400 text-center py-10"><i data-lucide="alert-triangle" class="w-8 h-8 mx-auto mb-2"></i> Failed to load posts.</div>`;
+                lucide.createIcons();
+            });
+        }
+
+        function renderPosts(posts) {
+            postsContainer.innerHTML = ''; // Clear container
+            
+            if (posts.length === 0) {
+                postsContainer.innerHTML = `
+                    <div class="bg-zinc-900 border border-zinc-800 border-dashed rounded-xl p-12 text-center text-zinc-500">
+                        <i data-lucide="inbox" class="w-12 h-12 mx-auto mb-4 opacity-50"></i>
+                        <h3 class="text-lg font-medium text-zinc-300 mb-1">No posts yet</h3>
+                        <p class="text-sm">Be the first to share your thoughts!</p>
+                    </div>
+                `;
+            } else {
+                posts.forEach(post => {
+                    const dateObj = new Date(post.date);
+                    const formattedDate = dateObj.toLocaleDateString('en-US', { 
+                        year: 'numeric', month: 'long', day: 'numeric' 
+                    });
+
+                    // Basic sanitization to prevent raw HTML injection via title/content
+                    const safeTitle = escapeHTML(post.title);
+                    const safeContent = escapeHTML(post.content);
+
+                    const postEl = document.createElement('article');
+                    postEl.className = 'bg-zinc-900 border border-zinc-800 rounded-xl p-6 shadow-md transition-all hover:border-zinc-700';
+                    postEl.innerHTML = `
+                        <header class="mb-4">
+                            <h2 class="text-2xl font-serif font-bold text-zinc-100 mb-2">${safeTitle}</h2>
+                            <div class="flex items-center text-xs font-medium text-zinc-500 uppercase tracking-wider">
+                                <i data-lucide="calendar" class="w-3 h-3 mr-1.5"></i>
+                                <time datetime="${post.date}">${formattedDate}</time>
+                            </div>
+                        </header>
+                        <div class="post-content text-zinc-300 leading-relaxed text-sm md:text-base">${safeContent}</div>
+                    `;
+                    postsContainer.appendChild(postEl);
+                });
+            }
+            lucide.createIcons();
+        }
+
+        // Helper to escape HTML tags in user input
+        function escapeHTML(str) {
+            if (!str) return '';
+            return str.replace(/[&<>'"]/g, 
+                tag => ({
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    "'": '&#39;',
+                    '"': '&quot;'
+                }[tag])
+            );
+        }
+
+        // Handle Post Submission
+        postForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!currentUser) {
+                showError("You must be logged in to post.");
+                return;
+            }
+
+            const title = document.getElementById('postTitle').value.trim();
+            const date = document.getElementById('postDate').value;
+            const content = document.getElementById('postContent').value.trim();
+
+            if (!title || !date || !content) {
+                showError("Please fill in all fields.");
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Publishing...`;
+            lucide.createIcons();
+
+            try {
+                const postsRef = collection(db, 'artifacts', appId, 'public', 'data', 'posts');
+                await addDoc(postsRef, {
+                    title,
+                    date,
+                    content,
+                    authorId: currentUser.uid,
+                    createdAt: new Date().toISOString()
+                });
+                
+                closeModal();
+            } catch (error) {
+                console.error("Error adding document: ", error);
+                showError("Failed to publish post. Please try again.");
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = `<i data-lucide="send" class="w-4 h-4"></i> Publish`;
+                lucide.createIcons();
+            }
+        });
+
+        // Start Auth flow
+        initializeAuth();
+
+    </script>
+</body>
+</html>
