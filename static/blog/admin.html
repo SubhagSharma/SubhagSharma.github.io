@@ -43,10 +43,11 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, serverTimestamp, doc, deleteDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        // NEW: Imported updateDoc to handle edits
+        import { getFirestore, collection, addDoc, serverTimestamp, doc, deleteDoc, getDocs, query, orderBy, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         // ⚠️ CRITICAL: Replace with your actual Firebase config keys ⚠️
-         const firebaseConfig = {
+       const firebaseConfig = {
 
     apiKey: "AIzaSyBjIgZGfD-BXW8f0t7MKis0MULrOQPZPPE",
 
@@ -64,11 +65,15 @@
 
   };
 
+
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
         let quill;
+        let editingPostId = null; // Tracks if we are editing an existing post
+        window.allPostsData = {}; // Stores post data locally for quick loading into the editor
+
         document.addEventListener("DOMContentLoaded", () => {
             quill = new Quill('#editor-container', {
                 theme: 'snow',
@@ -111,7 +116,6 @@
                                         const fileName = Date.now() + '-' + file.name.replace(/\s+/g, '-');
                                         const filePath = `static/blog/images/${fileName}`;
                                         
-                                        // Uses the correct repository structure
                                         const repo = 'SubhagSharma/subhagsharma.github.io'; 
 
                                         try {
@@ -168,8 +172,12 @@
                 }
 
                 let html = '';
+                window.allPostsData = {}; // Reset local storage on load
+
                 snapshot.forEach((docSnap) => {
                     const post = docSnap.data();
+                    window.allPostsData[docSnap.id] = post; // Save post data to memory
+                    
                     const date = post.date ? new Date(post.date.toDate()).toLocaleDateString() : 'Just now';
                     
                     html += `
@@ -178,9 +186,14 @@
                                 <p class="font-bold text-gray-900 dark:text-white text-sm">${post.title}</p>
                                 <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">${date}</p>
                             </div>
-                            <button onclick="deletePost('${docSnap.id}')" class="text-xs font-bold bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-900/50 px-3 py-1.5 rounded transition">
-                                Delete
-                            </button>
+                            <div class="flex space-x-2">
+                                <button onclick="editPost('${docSnap.id}')" class="text-xs font-bold bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-900/50 px-3 py-1.5 rounded transition">
+                                    Edit
+                                </button>
+                                <button onclick="deletePost('${docSnap.id}')" class="text-xs font-bold bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-900/50 px-3 py-1.5 rounded transition">
+                                    Delete
+                                </button>
+                            </div>
                         </div>
                     `;
                 });
@@ -190,10 +203,41 @@
             }
         }
 
+        // NEW: Load a post into the editor
+        window.editPost = function(id) {
+            const post = window.allPostsData[id];
+            if (!post) return;
+
+            editingPostId = id;
+            document.getElementById('post-title').value = post.title;
+            document.getElementById('post-tags').value = post.tags ? post.tags.join(', ') : '';
+            quill.root.innerHTML = post.content;
+            
+            document.getElementById('form-title').textContent = "Edit Post";
+            document.getElementById('submit-btn').textContent = "Update Post";
+            document.getElementById('cancel-edit-btn').classList.remove('hidden');
+            
+            // Scroll to the top of the editor smoothly
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        // NEW: Clear the editor and return to Create mode
+        window.cancelEdit = function() {
+            editingPostId = null;
+            document.getElementById('post-form').reset();
+            quill.setContents([]);
+            
+            document.getElementById('form-title').textContent = "Create New Post";
+            document.getElementById('submit-btn').textContent = "Publish Post";
+            document.getElementById('cancel-edit-btn').classList.add('hidden');
+            document.getElementById('post-status').textContent = "";
+        };
+
         window.deletePost = async function(id) {
             if (!confirm("Are you sure you want to delete this post? This cannot be undone.")) return;
             try {
                 await deleteDoc(doc(db, "posts", id));
+                if (editingPostId === id) cancelEdit(); // Clear editor if deleting the post being edited
                 loadAdminPosts(); 
             } catch (error) {
                 alert("Error deleting post: " + error.message);
@@ -249,23 +293,36 @@
 
             try {
                 statusEl.className = "text-blue-500 font-medium";
-                statusEl.textContent = "Publishing...";
+                statusEl.textContent = editingPostId ? "Updating..." : "Publishing...";
 
-                await addDoc(collection(db, "posts"), {
-                    title: title,
-                    content: content,
-                    tags: tagsArray,
-                    date: serverTimestamp()
-                });
-
-                statusEl.className = "text-green-500 font-medium";
-                statusEl.textContent = "Post published successfully!";
-                document.getElementById('post-form').reset();
-                quill.setContents([]); 
+                if (editingPostId) {
+                    // Update existing post
+                    await updateDoc(doc(db, "posts", editingPostId), {
+                        title: title,
+                        content: content,
+                        tags: tagsArray
+                    });
+                    statusEl.className = "text-green-500 font-medium";
+                    statusEl.textContent = "Post updated successfully!";
+                    setTimeout(cancelEdit, 1500); // Clear editor and return to normal mode
+                } else {
+                    // Create new post
+                    await addDoc(collection(db, "posts"), {
+                        title: title,
+                        content: content,
+                        tags: tagsArray,
+                        date: serverTimestamp()
+                    });
+                    statusEl.className = "text-green-500 font-medium";
+                    statusEl.textContent = "Post published successfully!";
+                    document.getElementById('post-form').reset();
+                    quill.setContents([]); 
+                }
+                
                 loadAdminPosts(); 
             } catch (error) {
                 statusEl.className = "text-red-500 font-medium";
-                statusEl.textContent = "Error publishing post: " + error.message;
+                statusEl.textContent = "Error saving post: " + error.message;
             }
         });
     </script>
@@ -311,7 +368,7 @@
             <div>
                 <div class="flex justify-between items-center border-b border-gray-200 dark:border-[#3a3b3c] pb-4 mb-6">
                     <div>
-                        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Create New Post</h1>
+                        <h1 id="form-title" class="text-2xl font-bold text-gray-900 dark:text-white">Create New Post</h1>
                         <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Logged in as <span id="user-email" class="text-blue-500"></span></p>
                     </div>
                     <button id="logout-btn" class="text-xs bg-gray-200 dark:bg-[#3a3b3c] hover:bg-gray-300 text-gray-800 dark:text-gray-200 px-4 py-2 rounded-lg transition">
@@ -337,9 +394,14 @@
 
                     <div class="flex justify-between items-center pt-4">
                         <span id="post-status" class="text-sm"></span>
-                        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-8 rounded-lg transition duration-200">
-                            Publish Post
-                        </button>
+                        <div class="space-x-3">
+                            <button type="button" id="cancel-edit-btn" onclick="cancelEdit()" class="hidden bg-gray-200 hover:bg-gray-300 dark:bg-[#3a3b3c] dark:hover:bg-[#4a4b4c] text-gray-800 dark:text-white font-medium py-2.5 px-6 rounded-lg transition duration-200">
+                                Cancel
+                            </button>
+                            <button type="submit" id="submit-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-8 rounded-lg transition duration-200">
+                                Publish Post
+                            </button>
+                        </div>
                     </div>
                 </form>
             </div>
