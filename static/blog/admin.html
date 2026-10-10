@@ -74,13 +74,33 @@
                 theme: 'snow',
                 placeholder: 'Write your post here...',
                 modules: {
-                    toolbar: [
-                        [{ 'font': [] }, { 'size': ['small', false, 'large', 'huge'] }],
-                        ['bold', 'italic', 'underline', 'strike'],
-                        [{ 'color': [] }, { 'background': [] }],
-                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                        ['link', 'clean']
-                    ]
+                    toolbar: {
+                        container: [
+                            [{ 'font': [] }, { 'size': ['small', false, 'large', 'huge'] }],
+                            ['bold', 'italic', 'underline', 'strike'],
+                            [{ 'color': [] }, { 'background': [] }],
+                            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                            ['link', 'image', 'clean'] // Added the image button here
+                        ],
+                        handlers: {
+                            // Custom image handler to prevent Base64 database crashes
+                            'image': function() {
+                                const url = prompt('Enter the image path (e.g., /blog/my-diagram.jpg after putting it in the static/blog folder):');
+                                if (url) {
+                                    const range = this.quill.getSelection() || { index: this.quill.getLength() };
+                                    
+                                    // Insert the image
+                                    this.quill.insertEmbed(range.index, 'image', url);
+                                    
+                                    // Automatically drop a formatted caption placeholder right below it
+                                    this.quill.insertText(range.index + 1, '\nCaption: Write your caption here...', { 'italic': true, 'color': '#6b7280', 'align': 'center' });
+                                    
+                                    // Move cursor to the end of the caption
+                                    this.quill.setSelection(range.index + 2);
+                                }
+                            }
+                        }
+                    }
                 }
             });
         });
