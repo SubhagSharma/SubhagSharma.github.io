@@ -48,6 +48,16 @@
         .ql-snow .ql-picker.ql-lineHeight .ql-picker-item[data-value="1.0"]::before { content: 'Single (1.0)'; }
         .ql-snow .ql-picker.ql-lineHeight .ql-picker-item[data-value="1.5"]::before { content: '1.5 Lines'; }
         .ql-snow .ql-picker.ql-lineHeight .ql-picker-item[data-value="2.0"]::before { content: 'Double (2.0)'; }
+
+        /* NEW: Paragraph Spacing Dropdown UI Customization */
+        .ql-snow .ql-picker.ql-marginBottom { width: 130px; }
+        .ql-snow .ql-picker.ql-marginBottom .ql-picker-label::before,
+        .ql-snow .ql-picker.ql-marginBottom .ql-picker-item::before {
+            content: 'Space After';
+        }
+        .ql-snow .ql-picker.ql-marginBottom .ql-picker-item[data-value="0em"]::before { content: 'None (0em)'; }
+        .ql-snow .ql-picker.ql-marginBottom .ql-picker-item[data-value="1em"]::before { content: 'Normal (1em)'; }
+        .ql-snow .ql-picker.ql-marginBottom .ql-picker-item[data-value="2em"]::before { content: 'Large (2em)'; }
     </style>
 
     <script type="module">
@@ -55,7 +65,6 @@
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, serverTimestamp, doc, deleteDoc, getDocs, query, orderBy, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-        // ⚠️ CRITICAL: Replace with your actual Firebase config keys ⚠️
         const firebaseConfig = {
             apiKey: "AIzaSyBjIgZGfD-BXW8f0t7MKis0MULrOQPZPPE",
             authDomain: "subhag-blog.firebaseapp.com",
@@ -75,13 +84,21 @@
         window.allPostsData = {};
 
         document.addEventListener("DOMContentLoaded", () => {
-            // Register Line Height Attributor with Quill
             const Parchment = Quill.import('parchment');
+            
+            // Register Line Height
             const LineHeightStyle = new Parchment.Attributor.Style('lineHeight', 'line-height', {
                 scope: Parchment.Scope.BLOCK,
                 whitelist: ['1.0', '1.5', '2.0']
             });
             Quill.register(LineHeightStyle, true);
+
+            // NEW: Register Paragraph Spacing (Margin Bottom)
+            const MarginBottomStyle = new Parchment.Attributor.Style('marginBottom', 'margin-bottom', {
+                scope: Parchment.Scope.BLOCK,
+                whitelist: ['0em', '1em', '2em']
+            });
+            Quill.register(MarginBottomStyle, true);
 
             quill = new Quill('#editor-container', {
                 theme: 'snow',
@@ -90,7 +107,8 @@
                     toolbar: {
                         container: [
                             [{ 'font': [] }, { 'size': ['small', false, 'large', 'huge'] }],
-                            [{ 'lineHeight': ['1.0', '1.5', '2.0'] }], // Line spacing options
+                            // NEW: marginBottom added to the toolbar grouping
+                            [{ 'lineHeight': ['1.0', '1.5', '2.0'] }, { 'marginBottom': ['0em', '1em', '2em'] }], 
                             ['bold', 'italic', 'underline', 'strike'],
                             [{ 'color': [] }, { 'background': [] }],
                             [{ 'list': 'ordered'}, { 'list': 'bullet' }],
