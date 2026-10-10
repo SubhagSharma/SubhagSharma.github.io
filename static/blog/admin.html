@@ -38,6 +38,15 @@
         html.dark .ql-fill { fill: #a9a9b3; }
         html.dark .ql-picker-options { background-color: #242526; border-color: #3a3b3c; }
         html.dark .ql-snow .ql-picker.ql-expanded .ql-picker-options { border-color: #555; }
+        /* Quill Line Spacing Dropdown UI */
+        .ql-snow .ql-picker.ql-lineHeight { width: 130px; }
+        .ql-snow .ql-picker.ql-lineHeight .ql-picker-label::before,
+        .ql-snow .ql-picker.ql-lineHeight .ql-picker-item::before { content: 'Spacing: Single'; }
+        .ql-snow .ql-picker.ql-lineHeight .ql-picker-item[data-value="1.0"]::before { content: 'Spacing: Single'; }
+        .ql-snow .ql-picker.ql-lineHeight .ql-picker-label[data-value="1.5"]::before,
+        .ql-snow .ql-picker.ql-lineHeight .ql-picker-item[data-value="1.5"]::before { content: 'Spacing: 1.5'; }
+        .ql-snow .ql-picker.ql-lineHeight .ql-picker-label[data-value="2.0"]::before,
+        .ql-snow .ql-picker.ql-lineHeight .ql-picker-item[data-value="2.0"]::before { content: 'Spacing: Double'; }
     </style>
 
     <script type="module">
@@ -73,8 +82,16 @@
         let quill;
         let editingPostId = null; // Tracks if we are editing an existing post
         window.allPostsData = {}; // Stores post data locally for quick loading into the editor
+        
 
         document.addEventListener("DOMContentLoaded", () => {
+            // NEW: Register Line Spacing with Quill
+            const Parchment = Quill.import('parchment');
+            const LineHeightStyle = new Parchment.Attributor.Style('lineHeight', 'line-height', {
+                scope: Parchment.Scope.BLOCK,
+                whitelist: ['1.0', '1.5', '2.0']
+            });
+            Quill.register(LineHeightStyle, true);            
             quill = new Quill('#editor-container', {
                 theme: 'snow',
                 placeholder: 'Write your post here...',
