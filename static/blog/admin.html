@@ -49,13 +49,14 @@
         .ql-snow .ql-picker.ql-lineHeight .ql-picker-item[data-value="1.5"]::before { content: '1.5 Lines'; }
         .ql-snow .ql-picker.ql-lineHeight .ql-picker-item[data-value="2.0"]::before { content: 'Double (2.0)'; }
 
-        /* NEW: Paragraph Spacing Dropdown UI Customization */
+        /* Paragraph Spacing Dropdown UI Customization */
         .ql-snow .ql-picker.ql-marginBottom { width: 130px; }
         .ql-snow .ql-picker.ql-marginBottom .ql-picker-label::before,
         .ql-snow .ql-picker.ql-marginBottom .ql-picker-item::before {
             content: 'Space After';
         }
         .ql-snow .ql-picker.ql-marginBottom .ql-picker-item[data-value="0em"]::before { content: 'None (0em)'; }
+        .ql-snow .ql-picker.ql-marginBottom .ql-picker-item[data-value="0.5em"]::before { content: 'Small (0.5em)'; }
         .ql-snow .ql-picker.ql-marginBottom .ql-picker-item[data-value="1em"]::before { content: 'Normal (1em)'; }
         .ql-snow .ql-picker.ql-marginBottom .ql-picker-item[data-value="2em"]::before { content: 'Large (2em)'; }
     </style>
@@ -93,10 +94,10 @@
             });
             Quill.register(LineHeightStyle, true);
 
-            // NEW: Register Paragraph Spacing (Margin Bottom)
+            // Register Paragraph Spacing (Margin Bottom) with 0.5em added
             const MarginBottomStyle = new Parchment.Attributor.Style('marginBottom', 'margin-bottom', {
                 scope: Parchment.Scope.BLOCK,
-                whitelist: ['0em', '1em', '2em']
+                whitelist: ['0em', '0.5em', '1em', '2em']
             });
             Quill.register(MarginBottomStyle, true);
 
@@ -107,8 +108,8 @@
                     toolbar: {
                         container: [
                             [{ 'font': [] }, { 'size': ['small', false, 'large', 'huge'] }],
-                            // NEW: marginBottom added to the toolbar grouping
-                            [{ 'lineHeight': ['1.0', '1.5', '2.0'] }, { 'marginBottom': ['0em', '1em', '2em'] }], 
+                            // marginBottom added to the toolbar grouping with 0.5em included
+                            [{ 'lineHeight': ['1.0', '1.5', '2.0'] }, { 'marginBottom': ['0em', '0.5em', '1em', '2em'] }], 
                             ['bold', 'italic', 'underline', 'strike'],
                             [{ 'color': [] }, { 'background': [] }],
                             [{ 'list': 'ordered'}, { 'list': 'bullet' }],
