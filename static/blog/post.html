@@ -17,7 +17,7 @@
     
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getFirestore, doc, getDoc, collection, addDoc, query, where, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getFirestore, doc, collection, addDoc, query, where, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
         const firebaseConfig = {
@@ -38,18 +38,16 @@
         const urlParams = new URLSearchParams(window.location.search);
         const postId = urlParams.get('id');
 
-        async function loadSinglePost() {
+        function loadSinglePost() {
             const container = document.getElementById('post-container');
             if (!postId) {
                 container.innerHTML = '<p class="text-red-500">Post not found.</p>';
                 return;
             }
 
-            try {
-                const docRef = doc(db, "posts", postId);
-                const docSnap = await getDoc(docRef);
-
-                onSnapshot(docRef, (docSnap) => {
+            const docRef = doc(db, "posts", postId);
+            
+            onSnapshot(docRef, (docSnap) => {
                 if (docSnap.exists()) {
                     const post = docSnap.data();
                     const dateString = post.date ? new Date(post.date.toDate()).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'Recent';
@@ -74,20 +72,18 @@
                             ${post.content}
                         </div>
                     `;
-                    
-                    // Load Comments after post loads
-                    loadComments();
                 } else {
-                    container.innerHTML = '<p class="text-red-500">Post does not exist.</p>';
+                    container.innerHTML = '<p class="text-red-500">Post does not exist or was deleted.</p>';
                 }
-            } catch (error) {
+            }, (error) => {
                 container.innerHTML = `<p class="text-red-500">Error loading post: ${error.message}</p>`;
-            }
+            });
+
+            loadComments();
         }
 
         // --- Custom Comment System Logic ---
         
-        // Handle UI changes based on login status
         onAuthStateChanged(auth, (user) => {
             const loginBtn = document.getElementById('login-btn');
             const commentForm = document.getElementById('comment-form');
@@ -106,16 +102,13 @@
             }
         });
 
-        // Google Login
         window.loginWithGoogle = async () => {
             try { await signInWithPopup(auth, provider); } 
             catch (error) { alert("Error signing in: " + error.message); }
         };
 
-        // Logout
         window.logout = () => signOut(auth);
 
-        // Submit Comment
         window.submitComment = async (e) => {
             e.preventDefault();
             const textInput = document.getElementById('comment-text');
@@ -144,9 +137,10 @@
             }
         };
 
-        // Real-time Comment Listener
         function loadComments() {
             const commentsList = document.getElementById('comments-list');
+            if (!postId) return;
+            
             const q = query(collection(db, "comments"), where("postId", "==", postId), orderBy("date", "desc"));
             
             onSnapshot(q, (snapshot) => {
