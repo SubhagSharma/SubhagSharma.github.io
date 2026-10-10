@@ -71,7 +71,39 @@
                     const post = doc.data();
                     const postId = doc.id; // Get the unique ID
                     const dateString = post.date ? new Date(post.date.toDate()).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'Recent';
+                    const post = doc.data();
+                    const postId = doc.id;
+                    const dateString = post.date ? new Date(post.date.toDate()).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'Recent';
                     
+                    // Create tag pills
+                    let tagsHtml = '';
+                    if (post.tags && post.tags.length > 0) {
+                        tagsHtml = '<div class="flex flex-wrap gap-2 mb-3">';
+                        post.tags.forEach(tag => {
+                            tagsHtml += `<span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-[#2d3748] dark:text-blue-300 border border-blue-200 dark:border-[#4a5568]">${tag}</span>`;
+                        });
+                        tagsHtml += '</div>';
+                    }
+
+                    const tempDiv = document.createElement("div");
+                    tempDiv.innerHTML = post.content;
+                    const plainText = tempDiv.textContent || tempDiv.innerText || "";
+                    const snippet = plainText.length > 150 ? plainText.substring(0, 150) + '...' : plainText;
+                    
+                    // Insert ${tagsHtml} right below the header
+                    html += `
+                        <article class="bg-white dark:bg-[#242526] p-6 rounded-lg mb-6 border border-gray-200 dark:border-[#3a3b3c] shadow-sm hover:border-gray-400 dark:hover:border-gray-500 transition duration-200">
+                            <header class="mb-2">
+                                <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                                    <a href="post.html?id=${postId}" class="hover:underline">${post.title}</a>
+                                </h2>
+                                <time class="text-xs text-gray-500 dark:text-gray-400">${dateString}</time>
+                            </header>
+                            ${tagsHtml}
+                            <div class="text-gray-700 dark:text-gray-300 text-sm leading-relaxed mb-4">
+                                ${snippet}
+                            </div>
+                            <!-- ... rest of the article ... -->
                     // Create a plain text snippet from the HTML content
                     const tempDiv = document.createElement("div");
                     tempDiv.innerHTML = post.content;
