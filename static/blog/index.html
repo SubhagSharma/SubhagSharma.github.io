@@ -3,13 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Subhag Sharma | Blog</title>
+    <title>Blog | Subhag Sharma</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        // Configure Tailwind for class-based dark mode
         tailwind.config = { darkMode: 'class' }
-        
-        // Theme toggle logic
         function toggleTheme() {
             const html = document.documentElement;
             if (html.classList.contains('dark')) {
@@ -20,20 +17,16 @@
                 localStorage.setItem('theme', 'dark');
             }
         }
-
-        // Apply saved theme on load
         if (localStorage.getItem('theme') === 'light') {
             document.documentElement.classList.remove('dark');
         }
     </script>
-    
-    <!-- Firebase SDKs -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-        // ⚠️ CRITICAL: Replace this block with your actual Firebase config keys ⚠️
-       const firebaseConfig = {
+        // ⚠️ CRITICAL: Replace with your actual Firebase config keys ⚠️
+        const firebaseConfig = {
 
     apiKey: "AIzaSyBjIgZGfD-BXW8f0t7MKis0MULrOQPZPPE",
 
@@ -51,7 +44,6 @@
 
   };
 
-
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
@@ -59,23 +51,19 @@
             const postsContainer = document.getElementById('posts-container');
             try {
                 const q = query(collection(db, "posts"), orderBy("date", "desc"));
-                const querySnapshot = await getDocs(q);
+                const snapshot = await getDocs(q);
                 
-                if (querySnapshot.empty) {
-                    postsContainer.innerHTML = '<p class="text-gray-500 dark:text-gray-400 italic">No posts published yet. Check back soon!</p>';
+                if (snapshot.empty) {
+                    postsContainer.innerHTML = '<p class="text-gray-500 dark:text-gray-400">No posts published yet.</p>';
                     return;
                 }
 
                 let html = '';
-                querySnapshot.forEach((doc) => {
-                    const post = doc.data();
-                    const postId = doc.id; // Get the unique ID
-                    const dateString = post.date ? new Date(post.date.toDate()).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'Recent';
+                snapshot.forEach((doc) => {
                     const post = doc.data();
                     const postId = doc.id;
-                    const dateString = post.date ? new Date(post.date.toDate()).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'Recent';
+                    const dateString = post.date ? new Date(post.date.toDate()).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'Just now';
                     
-                    // Create tag pills
                     let tagsHtml = '';
                     if (post.tags && post.tags.length > 0) {
                         tagsHtml = '<div class="flex flex-wrap gap-2 mb-3">';
@@ -85,12 +73,12 @@
                         tagsHtml += '</div>';
                     }
 
+                    // Strip HTML formatting for the preview snippet
                     const tempDiv = document.createElement("div");
                     tempDiv.innerHTML = post.content;
                     const plainText = tempDiv.textContent || tempDiv.innerText || "";
                     const snippet = plainText.length > 150 ? plainText.substring(0, 150) + '...' : plainText;
-                    
-                    // Insert ${tagsHtml} right below the header
+
                     html += `
                         <article class="bg-white dark:bg-[#242526] p-6 rounded-lg mb-6 border border-gray-200 dark:border-[#3a3b3c] shadow-sm hover:border-gray-400 dark:hover:border-gray-500 transition duration-200">
                             <header class="mb-2">
@@ -103,113 +91,76 @@
                             <div class="text-gray-700 dark:text-gray-300 text-sm leading-relaxed mb-4">
                                 ${snippet}
                             </div>
-                            <!-- ... rest of the article ... -->
-                    // Create a plain text snippet from the HTML content
-                    const tempDiv = document.createElement("div");
-                    tempDiv.innerHTML = post.content;
-                    const plainText = tempDiv.textContent || tempDiv.innerText || "";
-                    const snippet = plainText.length > 150 ? plainText.substring(0, 150) + '...' : plainText;
-                    
-                    html += `
-                        <article class="bg-white dark:bg-[#242526] p-6 rounded-lg mb-6 border border-gray-200 dark:border-[#3a3b3c] shadow-sm hover:border-gray-400 dark:hover:border-gray-500 transition duration-200">
-                            <header class="mb-3">
-                                <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                                    <a href="post.html?id=${postId}" class="hover:underline">${post.title}</a>
-                                </h2>
-                                <time class="text-xs text-gray-500 dark:text-gray-400">${dateString}</time>
-                            </header>
-                            <div class="text-gray-700 dark:text-gray-300 text-sm leading-relaxed mb-4">
-                                ${snippet}
-                            </div>
-                            <a href="post.html?id=${postId}" class="inline-flex items-center text-blue-600 dark:text-blue-400 text-sm font-semibold hover:underline">
-                                Read & Discuss 
-                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                            </a>
+                            <a href="post.html?id=${postId}" class="text-blue-600 dark:text-blue-400 font-medium hover:underline text-sm">Read more →</a>
                         </article>
                     `;
                 });
                 postsContainer.innerHTML = html;
             } catch (error) {
                 console.error("Error loading posts:", error);
-                postsContainer.innerHTML = '<p class="text-red-600 dark:text-red-400">Failed to load posts.</p>';
+                postsContainer.innerHTML = `<p class="text-red-500">Failed to load posts: ${error.message}</p>`;
             }
         }
 
-        window.onload = loadPosts;
+        document.addEventListener("DOMContentLoaded", loadPosts);
     </script>
 </head>
-<body class="bg-[#fafafa] dark:bg-[#1d1e20] text-gray-900 dark:text-[#a9a9b3] min-h-screen flex flex-col justify-between transition-colors duration-300 selection:bg-gray-300 dark:selection:bg-gray-700">
+<body class="bg-[#fafafa] dark:bg-[#1d1e20] text-gray-900 dark:text-[#a9a9b3] min-h-screen flex flex-col transition-colors duration-300 selection:bg-gray-300 dark:selection:bg-gray-700">
 
-    <!-- Header / Navigation -->
     <header class="max-w-4xl w-full mx-auto px-6 py-6 flex justify-between items-center border-b border-gray-200 dark:border-[#333]">
         <a href="/" class="text-2xl font-bold text-gray-900 dark:text-white tracking-tight hover:opacity-80 transition">Subhag Sharma</a>
         <div class="flex items-center space-x-6">
             <nav class="space-x-4 text-sm font-medium">
                 <a href="/" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition">Portfolio</a>
-                <a href="/blog/" class="text-gray-900 dark:text-white border-b-2 border-gray-900 dark:border-white pb-1">Blog</a>
+                <a href="/blog/" class="text-gray-900 dark:text-white transition font-bold border-b-2 border-blue-500 pb-1">Blog</a>
             </nav>
-            <!-- Theme Toggle Button -->
             <button onclick="toggleTheme()" class="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-800 transition" title="Toggle Theme">
-                <svg class="w-5 h-5 text-gray-800 dark:text-gray-200 hidden dark:block" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"/>
-                </svg>
-                <svg class="w-5 h-5 text-gray-800 dark:text-gray-200 block dark:hidden" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
-                </svg>
+                <svg class="w-5 h-5 text-gray-800 dark:text-gray-200 hidden dark:block" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"/></svg>
+                <svg class="w-5 h-5 text-gray-800 dark:text-gray-200 block dark:hidden" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/></svg>
             </button>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="max-w-4xl w-full mx-auto px-6 py-10 flex-grow grid grid-cols-1 md:grid-cols-12 gap-10">
+    <main class="flex-grow max-w-4xl w-full mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-3 gap-10">
         
-        <!-- Profile Sidebar -->
-        <aside class="md:col-span-4 space-y-6">
-            <div class="bg-white dark:bg-[#242526] p-6 rounded-lg border border-gray-200 dark:border-[#3a3b3c] shadow-sm text-center md:text-left">
-                
-                <!-- CHANGE YOUR PICTURE HERE -->
+        <!-- Sidebar Profile -->
+        <aside class="md:col-span-1 space-y-8">
+            <div class="bg-white dark:bg-[#242526] p-6 rounded-xl border border-gray-200 dark:border-[#3a3b3c] shadow-sm">
                 <img src="/blog/image.jpeg" alt="Subhag Sharma" class="w-24 h-24 rounded-full object-cover mx-auto md:mx-0 mb-4 border border-gray-300 dark:border-[#3a3b3c] shadow-sm">
                 
-                <h1 class="text-xl font-bold text-gray-900 dark:text-white mb-1">Thoughts & Research</h1>
-                <p class="text-gray-600 dark:text-gray-400 text-xs leading-relaxed mb-4">
+                <h1 class="text-lg font-bold text-gray-900 dark:text-white mb-2">Thoughts & Research</h1>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mb-4 leading-relaxed">
                     M.Tech student at IIT Jammu specializing in Explainable AI (XAI), medical imaging, and computer vision.
                 </p>
-                <p class="text-gray-500 dark:text-gray-500 text-xs leading-relaxed">
+                <p class="text-sm text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
                     Sharing perspectives on AI trends, cognitive AI paradigms, and machine learning architectures, sometimes just to vent and sometimes to ragebait.
                 </p>
-                <!-- Profile Sidebar -->
-               
-                <!-- ADD THIS NEW BLOCK -->
-                <div class="mt-6 pt-6 border-t border-gray-200 dark:border-[#3a3b3c]">
+                
+                <div class="pt-4 border-t border-gray-100 dark:border-[#3a3b3c]">
                     <h3 class="text-sm font-bold text-gray-900 dark:text-white mb-2">Collaborations & Disputes</h3>
-                    <p class="text-xs text-gray-600 dark:text-gray-400 mb-3 leading-relaxed">
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">
                         Have a complaint about a take? Disagree with an architecture review? Or want to feature your own guest blog here? Reach out directly.
                     </p>
-                    <a href="mailto:mr.subhagsharma@gmail.com" class="block w-full text-center bg-gray-900 dark:bg-gray-700 hover:bg-gray-800 dark:hover:bg-gray-600 text-white text-xs font-bold py-2 rounded transition">
+                    <a href="mailto:mr.subhagsharma@gmail.com" class="block w-full text-center bg-gray-900 dark:bg-white hover:bg-gray-800 dark:hover:bg-gray-200 text-white dark:text-gray-900 font-semibold py-2 px-4 rounded transition">
                         Write to Me
                     </a>
                 </div>
-                <!-- END NEW BLOCK -->
-            </div>
             </div>
         </aside>
 
-        <!-- Blog Feed -->
-        <section class="md:col-span-8">
-            <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-6 border-b border-gray-200 dark:border-[#333] pb-2">Posts</h2>
-            <div id="posts-container">
-                <div class="animate-pulse space-y-4">
-                    <div class="h-6 bg-gray-200 dark:bg-[#333] rounded w-3/4"></div>
-                    <div class="h-4 bg-gray-200 dark:bg-[#333] rounded w-1/4"></div>
-                    <div class="h-20 bg-gray-200 dark:bg-[#333] rounded w-full"></div>
-                </div>
+        <!-- Main Feed -->
+        <section class="md:col-span-2">
+            <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-6 border-b border-gray-200 dark:border-[#3a3b3c] pb-2">Posts</h2>
+            
+            <div id="posts-container" class="space-y-2">
+                <p class="text-gray-500 dark:text-gray-400 animate-pulse">Loading posts...</p>
             </div>
         </section>
 
     </main>
 
-    <footer class="max-w-4xl w-full mx-auto px-6 py-8 text-center text-xs text-gray-500 dark:text-gray-600 border-t border-gray-200 dark:border-[#333]">
-        © 2026 Subhag Sharma · Powered by PaperMod & Firebase
+    <footer class="text-center py-8 text-sm text-gray-500 dark:text-gray-400 border-t border-gray-200 dark:border-[#333] mt-auto">
+        &copy; 2026 Subhag Sharma &middot; Powered by PaperMod & Firebase
     </footer>
 
 </body>
